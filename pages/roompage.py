@@ -16,7 +16,7 @@ class RoomPage(ft.View):
         # add logout button
         # show med's name in the top right corner near logout button
         self.appbar = ft.AppBar(
-            title=ft.Text("Комнаты Модеста"),
+            title=ft.Text(DataProvider.date_rn),
             bgcolor=ft.colors.SURFACE_VARIANT,
             actions=[
                 ft.Row(
@@ -45,18 +45,10 @@ class RoomPage(ft.View):
         print(room_count_per_floor)
         print(windows_for_room)
 
-        self.controls = [
-            ft.Text(DataProvider.date_rn, size=20),
-            ft.Text("Количество комнат на этаже: {}".format(room_count_per_floor), size=15),
-            ft.Text("Количество комнат на этаже: {}".format(" ".join(map(str, windows_for_room))), size=15),
-            ft.Container(
-                self.floor_column,
-                expand=True,
-            )
-        ]
-
-
         floor_rn = 1
+        room_count = 0
+        all_room_count = 1
+        room_arr = []
         for floor in info["windows"]["data"]:
             f = info["windows"]["data"][floor]
             print(f)
@@ -66,10 +58,12 @@ class RoomPage(ft.View):
             ) 
             counter = windows_for_room.copy()
             rn = 0
+            lighted = False
             for i in f:
                 counter[rn] -= 1
                 c = ft.colors.WHITE
                 if i:
+                    lighted = True
                     c = bgcolor=ft.colors.AMBER
                 floor_row.controls.append(
                     ft.Container(
@@ -84,11 +78,59 @@ class RoomPage(ft.View):
                     )
                 )
                 if counter[rn] == 0:
+                    if lighted:
+                        room_count += 1
+                        room_arr.append(all_room_count)
                     rn += 1
+                    all_room_count += 1
                     floor_rn += 1
-
+                    lighted = False
             self.floor_column.controls.append(floor_row)
+
         self.floor_column.controls = self.floor_column.controls[::-1]
+
+        self.ans_text = ft.Text(size=15)
+
+        self.controls = [
+            ft.Text("Входные данные", size=20, weight=ft.FontWeight.BOLD),
+            ft.Text("Количество комнат на этаже: {}".format(room_count_per_floor), size=15),
+            ft.Text("Количество комнат на этаже: {}".format(" ".join(map(str, windows_for_room))), size=15),
+            ft.Container(
+                self.floor_column,
+            ),
+            ft.Text("Ответ", size=20, weight=ft.FontWeight.BOLD),
+            ft.Text("Количество комнат: {}".format(room_count), size=15),
+            ft.Text("Номера комнат: {}".format(", ".join(map(str, room_arr))), size=15),
+            ft.TextButton("Проверить ответ", on_click=self.check, data=[room_count, room_arr]),
+            ft.Text(size=15),
+        ]
+    
+    def check(self, e):
+        d = e.control.data
+        inp = {
+            # "message": {
+                "data": {
+                    "count": d[0],
+                    "rooms": d[1]
+                },
+                "date": DataProvider.date_rn
+            # }
+        } 
+        print(inp)
+        inpj = json.dumps(inp) #.replace('"', "'")
+        print(inpj)
+
+        req = requests.post("https://olimp.miet.ru/ppo_it_final", headers={"X-Auth-Token": "ppo_10_11568", 'Content-type': 'application/json'}, json=inpj)
+        print(req.text)
+        print(req.status_code)
+        print(req.headers)
+
+        ans = 1
+
+        pass
+
+
+
 
 
 

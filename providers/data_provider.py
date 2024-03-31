@@ -7,74 +7,31 @@ class DataProvider:
 
     @classmethod
     def initialize(self):
-        self.con = sqlite3.connect("cancerai.db", check_same_thread=False)
+        self.con = sqlite3.connect("rooms.db", check_same_thread=False)
         self.cur = self.con.cursor()
         self.create_db()
 
     @classmethod
     def create_db(self):
-        exists = self.cur.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='patient'").fetchone()
+        exists = self.cur.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='answers'").fetchone()
         if exists:
             return
         # for dates: https://www.sqlite.org/lang_datefunc.html
         # calculate age from byear
-        self.cur.execute("create table patient( \
+        self.cur.execute("create table answers( \
                         id integer not null primary key autoincrement, \
-                        first_name text not null, \
-                        last_name text not null, \
-                        byear text not null \
-                        )")
-
-        self.cur.execute("create table med( \
-                        id integer not null primary key autoincrement, \
-                        first_name text not null, \
-                        last_name text not null \
-                        )")
-
-        self.cur.execute("create table result( \
-                        id integer not null primary key autoincrement, \
-                        patient_id integer not null, \
-                        med_id integer not null, \
-                        cancer text not null, \
-                        result text not null, \
-                        comment text not null, \
                         date text not null \
+                        ans integer not null \
                         )")
-
-        self.cur.execute("insert into patient (first_name, last_name, byear) values ('Имя', 'Фамилий', '01-01-2000')")
-        self.cur.execute("insert into med (first_name, last_name) values ('Имя2', 'Фамилий2')")
 
         self.con.commit()
 
     @classmethod
-    def verify_login(self, check_patient_id, check_med_id):
-        exists = self.cur.execute("SELECT 1 FROM patient WHERE id = ? \
-                                    UNION ALL \
-                                    SELECT 1 FROM med WHERE id = ?", (check_patient_id, check_med_id)).fetchall()
-        if len(exists) < 2:
-            return False
-        self.patient_id = check_patient_id
-        self.med_id = check_med_id
-        return True
+    def change_ans(self, date, ans):
+        self.cur.execute("insert into answers (date, ans) values (?, ?)", (date, ans))
 
     @classmethod
-    def get_patient_info(self):
-        result = self.cur.execute("select first_name, last_name, byear from patient where id = ?", (self.patient_id,)).fetchone()
+    def get_ans(self, date):
+        result = self.cur.execute("select ans from answers where date = ?", (date,)).fetchone()
         if result:
             return result
-
-    @classmethod
-    def get_patient_results(self):
-        result = self.cur.execute("select date, med_id, cancer, result, comment from result where patient_id = ?", (self.patient_id,)).fetchmany()
-        if result:
-            return result
-
-    @classmethod
-    def get_med_info(self):
-        result = self.cur.execute("select first_name, last_name from med where id = ?", (self.med_id,)).fetchone()
-        if result:
-            return result
-
-    @classmethod
-    def cancer_predict(self):
-        pass
