@@ -45,7 +45,7 @@ class Dashboard(ft.View):
                 content=ft.Row(
                     controls=[
                         ft.Text(i),
-                        ft.TextButton("Go", on_click=self.go_to_roompage, data=i)
+                        ft.TextButton("Открыть", on_click=self.go_to_roompage, data=i)
                     ],
                     expand=True,
                 ),

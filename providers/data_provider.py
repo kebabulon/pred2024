@@ -20,7 +20,7 @@ class DataProvider:
         # calculate age from byear
         self.cur.execute("create table answers( \
                         id integer not null primary key autoincrement, \
-                        date text not null \
+                        date text not null, \
                         ans integer not null \
                         )")
 

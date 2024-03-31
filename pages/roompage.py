@@ -90,6 +90,7 @@ class RoomPage(ft.View):
         self.floor_column.controls = self.floor_column.controls[::-1]
 
         self.ans_text = ft.Text(size=15)
+        self.update_ans(DataProvider.get_ans(DataProvider.date_rn))
 
         self.controls = [
             ft.Text("Входные данные", size=20, weight=ft.FontWeight.BOLD),
@@ -102,7 +103,7 @@ class RoomPage(ft.View):
             ft.Text("Количество комнат: {}".format(room_count), size=15),
             ft.Text("Номера комнат: {}".format(", ".join(map(str, room_arr))), size=15),
             ft.TextButton("Проверить ответ", on_click=self.check, data=[room_count, room_arr]),
-            ft.Text(size=15),
+            self.ans_text,
         ]
     
     def check(self, e):
@@ -128,6 +129,17 @@ class RoomPage(ft.View):
         ans = 1
 
         pass
+    
+    def update_ans(self, res):
+        t = ""
+        if res == 0:
+            t = "Не пройдена"
+        elif not res:
+            t = "Отсутствует"
+        else:
+            t = "Пройдена"
+
+        self.ans_text.value = "Результат проверки: {}".format(t)
 
 
 
