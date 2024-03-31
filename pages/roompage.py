@@ -126,9 +126,9 @@ class RoomPage(ft.View):
         print(req.status_code)
         print(req.headers)
 
-        ans = 1
-
-        pass
+        # Update db code
+        # ans = 1
+        # DataProvider.change_ans(DataProvider.date_rn, ans)
     
     def update_ans(self, res):
         t = ""
