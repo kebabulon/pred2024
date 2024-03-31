@@ -1,20 +1,15 @@
 import sqlite3
-from providers.cancer_provider import CancerProvider
-
 
 class DataProvider:
     con: sqlite3.Connection
     cur: sqlite3.Cursor
-    cancer_provider: CancerProvider
-    patient_id: int
-    med_id: int
+    date_rn: str
 
     @classmethod
     def initialize(self):
         self.con = sqlite3.connect("cancerai.db", check_same_thread=False)
         self.cur = self.con.cursor()
         self.create_db()
-        self.cancer_provider = CancerProvider()
 
     @classmethod
     def create_db(self):

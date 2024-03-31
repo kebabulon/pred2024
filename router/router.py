@@ -6,11 +6,13 @@ from router.routes import ROUTES
 from providers.app_prodiver import AppProvider
 
 from pages.dashboard import Dashboard
+from pages.roompage import RoomPage
 
 class Router:
     def __init__(self):
         self.pages = {
             ROUTES.DASHBOARD_ROUTE: Dashboard,
+            ROUTES.ROOMPAGE_ROUTE: RoomPage,
         }
 
     def route_change(self, route):

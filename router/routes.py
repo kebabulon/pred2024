@@ -1,3 +1,3 @@
 class ROUTES:
-    LOGIN_ROUTE = "/login"
+    ROOMPAGE_ROUTE = "/roompage"
     DASHBOARD_ROUTE = "/dashboard"
