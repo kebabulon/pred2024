@@ -109,13 +109,13 @@ class RoomPage(ft.View):
     def check(self, e):
         d = e.control.data
         inp = {
-            # "message": {
+            "message": {
                 "data": {
                     "count": d[0],
                     "rooms": d[1]
                 },
                 "date": DataProvider.date_rn
-            # }
+            }
         } 
         print(inp)
         inpj = json.dumps(inp) #.replace('"', "'")
@@ -134,10 +134,13 @@ class RoomPage(ft.View):
         t = ""
         if res == 0:
             t = "Не пройдена"
+            self.ans_text.color = ft.colors.RED
         elif not res:
             t = "Отсутствует"
+            self.ans_text.color = ft.colors.WHITE
         else:
             t = "Пройдена"
+            self.ans_text.color = ft.colors.GREEN
 
         self.ans_text.value = "Результат проверки: {}".format(t)
 
