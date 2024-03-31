@@ -6,20 +6,9 @@ from router.navigator import Navigator
 from providers.data_provider import DataProvider
 from providers.app_prodiver import AppProvider
 
-from compontents.dashboard.stats import Stats
-from compontents.dashboard.analyze import Analyze
-
-
 class Dashboard(ft.View):
     def __init__(self):
         super().__init__(route=ROUTES.DASHBOARD_ROUTE)
-
-        self.stats = Stats()
-        self.analyze = Analyze()
-
-        self.active_view = ft.Container(
-            content=self.stats
-        )
 
         # add logout button
         # show med's name in the top right corner near logout button
@@ -33,33 +22,27 @@ class Dashboard(ft.View):
             ],
         )
 
-        self.navigation_bar = ft.NavigationBar(
-            destinations=[
-                ft.NavigationDestination(
-                    icon=ft.icons.PERSON,
-                    label="Журнал",
-                ),
-                 ft.NavigationDestination(
-                    icon=ft.icons.SEARCH,
-                    label="Анализ",
-                ),
-           ]
+        self.list_view = ft.ListView(
+            expand=1,
+            spacing=10,
+            padding=20,
+            auto_scroll=True
         )
 
-        self.navigation_bar.on_change = self.nav_bar_on_change
+        test = ft.Container(
+            content=ft.Row(
+                controls=[
+                    ft.Text("room 1"),
+                    ft.TextButton("Go")# , on_click=button_clicked, data=0)
+                ],
+                expand=True,
+            ),
+            padding=5,
+            bgcolor=ft.colors.PRIMARY_CONTAINER,
+        )
+        self.list_view.controls.append(test)
 
         self.controls = [
-            self.active_view,
+            self.list_view,
         ]
-    
-    def nav_bar_on_change(self, _):
-        if self.navigation_bar.selected_index == 0:
-            self.active_view.content = self.stats
-        elif self.navigation_bar.selected_index == 1:
-            self.active_view.content = self.analyze
-        self.active_view.update()
-
-    def rehydrate(self):
-        # update stats from pop up using page.views[0]
-        self.stats.update()
-        pass
+ 

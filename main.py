@@ -38,7 +38,7 @@ def main(page: ft.Page):
     page.on_route_change = router.route_change
     page.on_view_pop = view_pop
 
-    page.go("/login")
+    page.go("/dashboard")
 
 
 ft.app(target=main)

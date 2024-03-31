@@ -5,13 +5,11 @@ from router.routes import ROUTES
 
 from providers.app_prodiver import AppProvider
 
-from pages.login import Login
 from pages.dashboard import Dashboard
 
 class Router:
     def __init__(self):
         self.pages = {
-            ROUTES.LOGIN_ROUTE: Login,
             ROUTES.DASHBOARD_ROUTE: Dashboard,
         }
 
